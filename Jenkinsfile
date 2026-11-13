@@ -2,19 +2,17 @@
 pipeline {
     agent any
 
-    stages {
+    environment {
+        PATH = "/opt/maven/bin:${env.PATH}"
+    }
 
-        stage('Git Checkout') {
-            steps {
-                git branch: 'main',
-                    url: 'https://github.com/Moulali-Syed/sparkjava-war.git'
-            }
-        }
+    stages {
 
         stage('Check Java and Maven') {
             steps {
                 sh 'java -version'
                 sh 'mvn -version'
+                sh 'which mvn'
             }
         }
 
@@ -29,7 +27,6 @@ pipeline {
                 sh 'ls -lh target/*.war'
             }
         }
-
     }
 
     post {
@@ -38,7 +35,7 @@ pipeline {
         }
 
         failure {
-            echo 'Build failed. Check the console output.'
+            echo 'Build failed. Check console output.'
         }
     }
 }
